@@ -34,3 +34,20 @@ export function useIsMobile(): boolean {
   }, [width])
   return isMobile;
 }
+
+export function useREM(px = 16): void {
+  const MAX_FONT_SIZE = 32;
+  useEffect(() => {
+    const reCalcREM = () => {
+      const screenWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+      const remUnit = Math.min(MAX_FONT_SIZE, screenWidth / px);
+      document.documentElement.style.fontSize = `${remUnit}px`;
+    }
+    reCalcREM();
+    reCalcREM();
+    window.addEventListener('resize', reCalcREM);
+    return () => {
+      window.removeEventListener('resize', reCalcREM);
+    };
+  }, [px])
+}
